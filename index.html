@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACO-AI Lab | Alexandria Clinical Oncology AI & Translational Research Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a0f1e;--deep:#060c1a;--teal:#00c8b4;--teal-dim:#00a896;--gold:#c9a96e;--gold-dim:#a07840;--white:#f0f4f8;--muted:#8899aa;--card:rgba(255,255,255,.04);--border:rgba(0,200,180,.15);--border-gold:rgba(201,169,110,.25)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--deep);color:var(--white);font-family:'Outfit',sans-serif;font-weight:300;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+/* ICON SYSTEM */
+.ci{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.ci svg{display:block}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(6,12,26,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;flex-direction:column;gap:.1rem}
+.nav-logo .abbr{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.3em;color:var(--teal);font-weight:400}
+.nav-logo .full{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--white);letter-spacing:.03em}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.15em;color:var(--muted);text-decoration:none;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--teal)}
+.nav-cta{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.6rem 1.4rem;border:1px solid var(--teal);color:var(--teal);background:transparent;cursor:pointer;text-decoration:none;transition:background .3s,color .3s}
+.nav-cta:hover{background:var(--teal);color:var(--deep)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 70% 50%,rgba(0,200,180,.07) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 10% 80%,rgba(201,169,110,.05) 0%,transparent 60%),linear-gradient(135deg,#060c1a 0%,#0a1628 50%,#060c1a 100%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,180,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,180,.05) 1px,transparent 1px);background-size:60px 60px;animation:gridShift 20s linear infinite}
+@keyframes gridShift{0%{background-position:0 0}100%{background-position:60px 60px}}
+.helix{position:absolute;right:0;top:0;bottom:0;width:50%;opacity:.06;background:repeating-linear-gradient(-45deg,transparent,transparent 20px,rgba(0,200,180,.5) 20px,rgba(0,200,180,.5) 21px)}
+.hero-left{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 6rem 6rem;animation:fadeUp 1s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:var(--teal);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.8rem}
+.hero-tag::before{content:'';display:block;width:40px;height:1px;background:var(--teal)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,4.5rem);font-weight:300;line-height:1.1;color:var(--white);margin-bottom:1rem}
+.hero-title em{font-style:italic;color:var(--teal)}
+.hero-title .gold{color:var(--gold)}
+.hero-sub{font-size:.9rem;color:var(--muted);line-height:1.7;max-width:480px;margin:1.5rem 0 2.5rem}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{padding:.9rem 2rem;background:linear-gradient(135deg,var(--teal),var(--teal-dim));color:var(--deep);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,200,180,.3)}
+.btn-ghost{padding:.9rem 2rem;background:transparent;color:var(--gold);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--border-gold);cursor:pointer;text-decoration:none;transition:background .3s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-ghost:hover{background:rgba(201,169,110,.08)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:4rem}
+.stat-item{display:flex;flex-direction:column;gap:.3rem}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--teal)}
+.stat-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.hero-right{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;padding:6rem 4rem;animation:fadeUp 1s .3s ease both;opacity:0}
+.molecule-container{position:relative;width:380px;height:380px}
+.molecule-ring{position:absolute;border-radius:50%;border:1px solid;animation:spin linear infinite}
+.ring-1{inset:0;border-color:rgba(0,200,180,.2);animation-duration:30s}
+.ring-2{inset:30px;border-color:rgba(0,200,180,.15);animation-duration:20s;animation-direction:reverse}
+.ring-3{inset:70px;border-color:rgba(201,169,110,.2);animation-duration:15s}
+.ring-4{inset:110px;border-color:rgba(0,200,180,.3);animation-duration:10s;animation-direction:reverse}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.mol-node{position:absolute;border-radius:50%;background:var(--teal);box-shadow:0 0 20px rgba(0,200,180,.6);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.n1{width:14px;height:14px;top:50%;left:0;transform:translateY(-50%)}
+.n2{width:10px;height:10px;top:0;left:50%;transform:translateX(-50%);background:var(--gold);box-shadow:0 0 20px rgba(201,169,110,.6);animation-delay:.5s}
+.n3{width:16px;height:16px;bottom:0;right:30px;animation-delay:1s}
+.n4{width:8px;height:8px;top:30%;right:0;background:var(--gold);animation-delay:1.5s;box-shadow:0 0 15px rgba(201,169,110,.6)}
+.n5{width:12px;height:12px;bottom:20%;left:10%;animation-delay:2s}
+.mol-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.3rem}
+.mol-text-main{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--teal);letter-spacing:-.02em;line-height:1}
+.mol-text-sub{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.container{max-width:1200px;margin:0 auto;padding:0 4rem}
+.section-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:var(--teal);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+.section-label::before{content:'';display:block;width:30px;height:1px;background:var(--teal)}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.2;color:var(--white)}
+.section-title em{font-style:italic;color:var(--gold)}
+.divider{width:60px;height:1px;background:linear-gradient(to right,var(--teal),transparent);margin:1.5rem 0}
+
+/* FLAGSHIP */
+.flagship{padding:7rem 0;background:linear-gradient(180deg,var(--deep) 0%,var(--navy) 100%)}
+.flagship-inner{display:grid;grid-template-columns:1fr 2fr;gap:6rem;align-items:start}
+.flagship-body{font-size:1.05rem;line-height:1.9;color:rgba(240,244,248,.8)}
+.flagship-body p+p{margin-top:1.2rem}
+.flagship-body strong{color:var(--teal);font-weight:400}
+.flagship-quote{border-left:2px solid var(--gold);padding-left:1.5rem;margin:2rem 0;font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--gold);line-height:1.6}
+
+/* GRANT */
+.grant{padding:7rem 0;position:relative;overflow:hidden}
+.grant::before{content:'';position:absolute;top:-100px;right:-100px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,180,.06) 0%,transparent 70%);pointer-events:none}
+.grant-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem}
+.grant-main{background:var(--card);border:1px solid var(--border);padding:3rem;position:relative;overflow:hidden}
+.grant-main::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--teal-dim),transparent)}
+.grant-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,200,180,.1);border:1px solid var(--border);padding:.3rem .8rem;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--teal);text-transform:uppercase;margin-bottom:1.5rem}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.grant-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--white);margin-bottom:1rem;line-height:1.3}
+.grant-desc{font-size:.9rem;color:var(--muted);line-height:1.8}
+.grant-pillars{display:flex;flex-direction:column;gap:1rem;margin-top:2rem}
+.pillar{display:flex;gap:1rem;align-items:flex-start;padding:1rem 1.2rem;background:rgba(0,200,180,.04);border-left:2px solid rgba(0,200,180,.3);transition:border-color .3s,background .3s}
+.pillar:hover{border-color:var(--teal);background:rgba(0,200,180,.08)}
+.pillar-icon-wrap{flex-shrink:0;margin-top:2px}
+.pillar-title{font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;color:var(--white);margin-bottom:.3rem}
+.pillar-desc{font-size:.78rem;color:var(--muted);line-height:1.6}
+.grant-side{display:flex;flex-direction:column;gap:1.5rem}
+.grant-card{background:var(--card);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.grant-card:hover{border-color:rgba(0,200,180,.4);transform:translateY(-2px)}
+.grant-card-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.grant-card-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--white);margin-bottom:.6rem}
+.grant-card-text{font-size:.82rem;color:var(--muted);line-height:1.7}
+
+/* RESEARCH */
+.research{padding:7rem 0;background:linear-gradient(180deg,var(--deep) 0%,rgba(10,15,30,1) 100%)}
+.research-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;margin-top:3rem;background:var(--border)}
+.research-card{background:var(--navy);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background .4s}
+.research-card:hover{background:rgba(10,22,40,1)}
+.research-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.research-card:hover::after{transform:scaleX(1)}
+.research-num{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(0,200,180,.4);letter-spacing:.2em;margin-bottom:1rem}
+.research-icon-wrap{margin-bottom:1rem}
+.research-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--white);margin-bottom:.8rem}
+.research-desc{font-size:.82rem;color:var(--muted);line-height:1.7}
+.research-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.2rem}
+.tag{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--teal);border:1px solid rgba(0,200,180,.2);padding:.2rem .6rem}
+
+/* IMPACT */
+.impact{padding:7rem 0;position:relative}
+.impact-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.impact-visual{position:relative;height:380px}
+.impact-map-bg{width:100%;height:100%;background:radial-gradient(ellipse at 40% 40%,rgba(0,200,180,.1) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(201,169,110,.06) 0%,transparent 50%);border:1px solid var(--border);position:relative;overflow:hidden}
+.impact-map-bg::before{content:'EGYPT · AFRICA · MENA';position:absolute;bottom:1rem;right:1rem;font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.3em;color:rgba(0,200,180,.3)}
+.impact-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(0,200,180,.2),0 0 20px rgba(0,200,180,.4)}
+.impact-dot::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(0,200,180,.4);animation:ripple 2s ease-out infinite}
+@keyframes ripple{0%{transform:scale(1);opacity:1}100%{transform:scale(2.5);opacity:0}}
+.dot-alex{top:28%;left:38%}.dot-cairo{top:35%;left:45%}
+.dot-aswan{top:70%;left:55%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,169,110,.2),0 0 20px rgba(201,169,110,.4);animation-delay:.5s}
+.dot-nairobi{top:80%;left:60%;opacity:.5;animation-delay:1s}
+.dot-riyadh{top:42%;left:72%;opacity:.5;animation-delay:1.5s}
+.grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,180,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,180,.04) 1px,transparent 1px);background-size:30px 30px}
+.impact-metrics{display:flex;flex-direction:column;gap:2rem}
+.impact-metric{display:flex;gap:1.5rem;align-items:flex-start;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.impact-metric:last-child{border-bottom:none}
+.impact-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--teal);line-height:1;flex-shrink:0;min-width:80px}
+.impact-num.gold{color:var(--gold)}
+.impact-label{font-size:1rem;color:var(--white);margin-bottom:.4rem}
+.impact-detail{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+/* TEAM */
+.leadership{padding:7rem 0;background:var(--navy)}
+.pi-row{display:grid;grid-template-columns:260px 1fr;gap:3rem;align-items:start;background:rgba(0,200,180,.04);border:1px solid var(--border);padding:2.5rem;margin-bottom:3rem;position:relative}
+.pi-row::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.leader-card-inner{display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
+.leader-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(0,200,180,.2),rgba(201,169,110,.2));border:2px solid rgba(0,200,180,.3);display:flex;align-items:center;justify-content:center}
+.leader-avatar.gold-avatar{border-color:rgba(201,169,110,.4)}
+.leader-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--white)}
+.leader-role{font-size:.8rem;color:var(--gold);line-height:1.5;margin-top:.2rem}
+.leader-affil{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.08em;color:var(--muted);margin-top:.3rem;line-height:1.6}
+.leader-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(201,169,110,.1);border:1px solid var(--border-gold);padding:.25rem .7rem;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-top:.4rem}
+.leadership-text{font-size:.95rem;color:rgba(240,244,248,.8);line-height:1.9;margin-bottom:1.5rem}
+.expertise-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1.5rem}
+.expertise-item{display:flex;gap:.8rem;align-items:flex-start;padding:.9rem 1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);transition:border-color .3s}
+.expertise-item:hover{border-color:rgba(0,200,180,.2)}
+.expertise-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:.35rem}
+.expertise-text{font-size:.82rem;color:var(--muted);line-height:1.5}
+.researchers-label{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:var(--teal);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.8rem}
+.researchers-label::before{content:'';display:block;width:24px;height:1px;background:var(--teal)}
+.researchers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.researcher-card{background:var(--card);border:1px solid var(--border);padding:2rem;display:flex;gap:1.2rem;align-items:flex-start;transition:border-color .3s,transform .3s}
+.researcher-card:hover{border-color:rgba(0,200,180,.35);transform:translateY(-2px)}
+.researcher-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,rgba(0,200,180,.15),rgba(10,22,40,1));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.researcher-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--white);margin-bottom:.2rem}
+.researcher-title{font-size:.78rem;color:var(--gold);line-height:1.5;margin-bottom:.5rem}
+.researcher-focus{font-size:.76rem;color:var(--muted);line-height:1.6}
+.researcher-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.7rem}
+.rtag{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.08em;color:rgba(0,200,180,.7);border:1px solid rgba(0,200,180,.15);padding:.15rem .5rem}
+
+/* TRAINING */
+.training{padding:7rem 0}
+.training-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:3rem}
+.training-card{background:var(--deep);padding:2rem 1.5rem;text-align:center;transition:background .3s}
+.training-card:hover{background:rgba(10,22,40,.9)}
+.training-icon-wrap{display:flex;justify-content:center;margin-bottom:1rem}
+.training-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--white);margin-bottom:.6rem}
+.training-desc{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+/* COLLAB */
+.collab{padding:5rem 0;background:var(--navy);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.collab-label{text-align:center;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:var(--muted);text-transform:uppercase;margin-bottom:2.5rem}
+.collab-row{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+.collab-item{display:flex;align-items:center;gap:.6rem;padding:.7rem 1.4rem;border:1px solid rgba(255,255,255,.07);font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);transition:border-color .3s,color .3s}
+.collab-item:hover{border-color:rgba(0,200,180,.3);color:var(--teal)}
+
+/* CONTACT */
+.contact{padding:7rem 0;position:relative;overflow:hidden}
+.contact::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 100%,rgba(0,200,180,.08) 0%,transparent 70%)}
+.contact-inner{text-align:center;position:relative;z-index:1;max-width:700px;margin:0 auto}
+.contact-text{font-size:.95rem;color:var(--muted);line-height:1.8;margin:1.5rem 0 2.5rem}
+.contact-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:4rem}
+.contact-card{background:var(--deep);padding:2rem;text-align:left}
+.contact-card-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.3em;color:var(--teal);text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.contact-card-val{font-size:.88rem;color:var(--white);line-height:1.7}
+
+/* FOOTER */
+footer{padding:2.5rem 4rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.footer-left{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--muted);line-height:1.8}
+.footer-right{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(136,153,170,.5);letter-spacing:.1em}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--deep)}
+::-webkit-scrollbar-thumb{background:rgba(0,200,180,.3)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  .hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:7rem 2rem 4rem}
+  .container{padding:0 2rem}
+  .flagship-inner,.grant-grid,.impact-inner,.researchers-grid,.contact-cards{grid-template-columns:1fr}
+  .pi-row{grid-template-columns:1fr}
+  .research-grid{grid-template-columns:1fr 1fr}
+  .training-grid{grid-template-columns:1fr 1fr}
+  footer{flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+
+<!-- SVG ICON SPRITE — all icons, pure CSS/SVG, no emojis anywhere -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<defs>
+<symbol id="i-dna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 2c0 0-6 4-6 10s6 10 6 10"/><path d="M12 2c0 0 6 4 6 10s-6 10-6 10"/>
+  <path d="M6.5 7h11"/><path d="M5.5 12h13"/><path d="M6.5 17h11"/>
+</symbol>
+<symbol id="i-pill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7.07-7.07l7 7a5 5 0 0 1-7.07 7.07z"/>
+  <line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>
+</symbol>
+<symbol id="i-list-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+  <rect x="9" y="3" width="6" height="4" rx="1"/>
+  <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+</symbol>
+<symbol id="i-hospital" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="6" width="18" height="15" rx="1"/><path d="M3 10h18"/>
+  <path d="M9 21V10"/><path d="M15 21V10"/>
+  <path d="M12 3v4"/><path d="M10 5h4"/>
+</symbol>
+<symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+  <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+  <line x1="3" y1="12" x2="21" y2="12"/>
+</symbol>
+<symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2Z"/>
+  <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/>
+</symbol>
+<symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+  <line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/>
+  <line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/>
+</symbol>
+<symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="3"/>
+  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+</symbol>
+<symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"/>
+  <line x1="2" y1="12" x2="22" y2="12"/>
+  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+</symbol>
+<symbol id="i-arch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="2" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/>
+  <rect x="9" y="15" width="6" height="6" rx="1"/>
+  <path d="M5 9v3h14V9"/><line x1="12" y1="12" x2="12" y2="15"/>
+</symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  <polyline points="9,12 11,14 15,10"/>
+</symbol>
+<symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <polygon points="12,2 22,8.5 12,15 2,8.5"/>
+  <line x1="12" y1="15" x2="12" y2="22"/>
+  <path d="M20 10.5V16"/><circle cx="20" cy="16" r="1" fill="currentColor" stroke="none"/>
+</symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/>
+  <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
+  <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
+  <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/>
+  <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
+</symbol>
+<symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18" rx="2"/>
+  <circle cx="8.5" cy="8.5" r="1.5"/>
+  <polyline points="21,15 16,10 5,21"/>
+</symbol>
+<symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+</symbol>
+<symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+</symbol>
+<symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+</symbol>
+<symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+  <polyline points="22,6 12,13 2,6"/>
+</symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/>
+</symbol>
+<symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18"/><path d="M3 9h18"/><path d="M9 21V9"/><path d="M15 21V9"/>
+</symbol>
+<symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M9 3h6"/><path d="M10 3v6l-4 9a1 1 0 0 0 .9 1.45h10.2A1 1 0 0 0 18 18l-4-9V3"/>
+  <line x1="6.5" y1="15" x2="17.5" y2="15"/>
+</symbol>
+</defs>
+</svg>
+
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span class="abbr">ACO-AI Lab</span>
+    <span class="full">Alexandria Clinical Oncology AI Lab</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#research">Research</a></li>
+    <li><a href="#grant">Grant</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#leadership">Team</a></li>
+    <li><a href="#training">Training</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="helix"></div>
+  <div class="hero-left">
+    <div class="hero-tag">Alexandria University · Faculty of Medicine</div>
+    <h1 class="hero-title">Precision <em>AI</em> for<br>Oncology in<br><span class="gold">Emerging Contexts</span></h1>
+    <p class="hero-sub">The ACO-AI Lab pioneers artificial intelligence–driven cancer research tailored to Egyptian and regional healthcare realities—bridging computational innovation with equitable, real-world clinical impact across Africa and the Middle East.</p>
+    <div class="hero-actions">
+      <a href="#grant" class="btn-primary">
+        <svg class="ci" width="14" height="14" style="color:var(--deep)"><use href="#i-dna"/></svg>
+        Flagship Grant
+      </a>
+      <a href="#research" class="btn-ghost">
+        <svg class="ci" width="14" height="14"><use href="#i-target"/></svg>
+        Research Areas
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-num">6</span><span class="stat-label">Core Focus Areas</span></div>
+      <div class="stat-item"><span class="stat-num">1</span><span class="stat-label">Regional Hub</span></div>
+      <div class="stat-item"><span class="stat-num">&#x221E;</span><span class="stat-label">Underserved Reach</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="molecule-container">
+      <div class="molecule-ring ring-1"></div><div class="molecule-ring ring-2"></div>
+      <div class="molecule-ring ring-3"></div><div class="molecule-ring ring-4"></div>
+      <div class="mol-node n1"></div><div class="mol-node n2"></div>
+      <div class="mol-node n3"></div><div class="mol-node n4"></div><div class="mol-node n5"></div>
+      <div class="mol-center">
+        <div class="mol-text-main">AI</div>
+        <div class="mol-text-sub">Oncology · Egypt · MENA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLAGSHIP -->
+<section class="flagship" id="about">
+  <div class="container">
+    <div class="flagship-inner">
+      <div>
+        <div class="section-label">Identity</div>
+        <h2 class="section-title">Who <em>We Are</em></h2>
+        <div class="divider"></div>
+        <div class="flagship-quote">"Where intelligent systems meet the realities of cancer care in emerging settings."</div>
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.7;margin-top:1.5rem">
+          Department of Clinical Oncology<br>Faculty of Medicine, Alexandria University<br><br>
+          Under the leadership of<br><strong style="color:var(--gold)">Prof. Dr. Waleed Arafat</strong>
+        </p>
+      </div>
+      <div class="flagship-body">
+        <p>The <strong>Alexandria Clinical Oncology AI &amp; Translational Research Lab (ACO-AI Lab)</strong> is a pioneering initiative dedicated to transforming cancer care through artificial intelligence. Established within the Department of Clinical Oncology at the Faculty of Medicine, Alexandria University, the lab serves as a nexus between advanced computational science and clinical oncology—with a strong emphasis on real-world translation and impact.</p>
+        <p>The ACO-AI Lab is uniquely positioned to address one of the most critical gaps in global oncology innovation: the <strong>adaptation of cutting-edge AI technologies to healthcare systems with constrained resources</strong>. By developing and validating AI-driven solutions across drug discovery, diagnosis, medical imaging, and personalized treatment planning, the lab ensures that innovation is not only scientifically robust but also clinically applicable within the Egyptian healthcare system.</p>
+        <p>A central pillar of the lab's mission is the <strong>localization of artificial intelligence</strong>—designing systems that reflect regional epidemiology, clinical workflows, and population-specific characteristics, transforming global oncology knowledge into practical, scalable tools effectively deployed in Egypt and similar healthcare environments.</p>
+        <p>Beyond national impact, the ACO-AI Lab is envisioned as a <strong>regional hub for AI-driven oncology across Africa and the Middle East</strong>, leading collaborative research, capacity building, and technology transfer efforts to ensure that advancements in cancer care reach underserved populations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRANT -->
+<section class="grant" id="grant">
+  <div class="container">
+    <div class="section-label">Flagship Initiative</div>
+    <h2 class="section-title">AI Drug Discovery <em>Platform</em></h2>
+    <div class="divider"></div>
+    <p style="font-size:.95rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:1rem">Our primary active grant focuses on building a next-generation AI-driven drug discovery platform, purpose-built for the Egyptian oncology context and designed to serve underserved communities across the region.</p>
+    <div class="grant-grid">
+      <div class="grant-main">
+        <div class="grant-badge"><span class="badge-dot"></span>Active Grant &middot; Drug Discovery</div>
+        <div class="grant-title">Egyptian AI Drug Discovery &amp; Treatment Adaptation Platform</div>
+        <p class="grant-desc">A comprehensive, end-to-end AI platform for oncology drug discovery and treatment guideline adaptation—engineered to reflect the unique genomic landscape, clinical workflows, and resource constraints of Egyptian and MENA populations.</p>
+        <div class="grant-pillars">
+          <div class="pillar">
+            <div class="pillar-icon-wrap"><svg class="ci" width="22" height="22" style="color:var(--teal)"><use href="#i-dna"/></svg></div>
+            <div class="pillar-text">
+              <div class="pillar-title">Egyptian-Context AI Models</div>
+              <div class="pillar-desc">Training and validating ML/DL models on Egyptian patient cohorts—accounting for local tumor biology, genetic variants, and population-specific disease profiles that differ from Western datasets.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon-wrap"><svg class="ci" width="22" height="22" style="color:var(--teal)"><use href="#i-pill"/></svg></div>
+            <div class="pillar-text">
+              <div class="pillar-title">Drug Repurposing Engine</div>
+              <div class="pillar-desc">Identifying cost-effective repurposing candidates using multi-omics integration (genomics, proteomics, transcriptomics) to deliver accessible treatments for Egyptian patients.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon-wrap"><svg class="ci" width="22" height="22" style="color:var(--teal)"><use href="#i-list-doc"/></svg></div>
+            <div class="pillar-text">
+              <div class="pillar-title">Guideline Localization</div>
+              <div class="pillar-desc">Adapting international treatment protocols (NCCN, ESMO, ASCO) to Egyptian clinical realities—accounting for available drugs, diagnostics, infrastructure, and patient demographics.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon-wrap"><svg class="ci" width="22" height="22" style="color:var(--teal)"><use href="#i-hospital"/></svg></div>
+            <div class="pillar-text">
+              <div class="pillar-title">Rural &amp; Underserved Deployment</div>
+              <div class="pillar-desc">Lightweight, offline-capable AI decision-support tools deployable in low-bandwidth, resource-limited settings across rural Egypt and the broader MENA region.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grant-side">
+        <div class="grant-card">
+          <div class="grant-card-label"><svg class="ci" width="13" height="13" style="color:var(--gold)"><use href="#i-arch"/></svg> Platform Architecture</div>
+          <div class="grant-card-title">Multi-Omics Integration Engine</div>
+          <p class="grant-card-text">Fusing genomic, proteomic, transcriptomic, and clinical data streams to identify novel therapeutic targets and predict drug response in the Egyptian patient population—bridging precision medicine with regional accessibility.</p>
+        </div>
+        <div class="grant-card">
+          <div class="grant-card-label"><svg class="ci" width="13" height="13" style="color:var(--gold)"><use href="#i-globe"/></svg> Equity Focus</div>
+          <div class="grant-card-title">Underserved Community Outreach</div>
+          <p class="grant-card-text">Deploying AI tools specifically optimized for Egypt's rural governorates and underserved urban areas—including Upper Egypt, Delta region communities, and border areas with limited oncology infrastructure.</p>
+        </div>
+        <div class="grant-card">
+          <div class="grant-card-label"><svg class="ci" width="13" height="13" style="color:var(--gold)"><use href="#i-shield"/></svg> Regulatory &amp; Validation</div>
+          <div class="grant-card-title">Egyptian Healthcare System Alignment</div>
+          <p class="grant-card-text">Ensuring all platform outputs align with Egyptian Ministry of Health &amp; Population (MoHP) frameworks, national formularies, and Egyptian insurance coverage realities to maximize real-world applicability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section class="research" id="research">
+  <div class="container">
+    <div class="section-label">Science</div>
+    <h2 class="section-title">Core <em>Research</em> Areas</h2>
+    <div class="divider"></div>
+    <div class="research-grid">
+      <div class="research-card">
+        <div class="research-num">01</div>
+        <div class="research-icon-wrap"><svg class="ci" width="32" height="32" style="color:var(--teal)"><use href="#i-dna"/></svg></div>
+        <div class="research-name">AI Drug Discovery</div>
+        <p class="research-desc">Novel therapeutic target identification, drug repurposing strategies, and multi-omics integration for precision oncology—adapted for Egyptian patient biology and cost constraints.</p>
+        <div class="research-tags"><span class="tag">Machine Learning</span><span class="tag">Multi-Omics</span><span class="tag">Repurposing</span></div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">02</div>
+        <div class="research-icon-wrap"><svg class="ci" width="32" height="32" style="color:var(--teal)"><use href="#i-scan"/></svg></div>
+        <div class="research-name">Medical Imaging &amp; Radiomics</div>
+        <p class="research-desc">AI-based tumor detection, segmentation, and radiogenomics. Integration with clinical imaging workflows for real-time application in Egyptian hospital systems.</p>
+        <div class="research-tags"><span class="tag">Deep Learning</span><span class="tag">Radiomics</span><span class="tag">Segmentation</span></div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">03</div>
+        <div class="research-icon-wrap"><svg class="ci" width="32" height="32" style="color:var(--teal)"><use href="#i-brain"/></svg></div>
+        <div class="research-name">LLMs in Clinical Oncology</div>
+        <p class="research-desc">Automated literature synthesis, AI-assisted clinical documentation, and Arabic-language decision-support tools adapted for Egyptian clinical practice and guidelines.</p>
+        <div class="research-tags"><span class="tag">LLMs</span><span class="tag">Arabic NLP</span><span class="tag">Guidelines</span></div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">04</div>
+        <div class="research-icon-wrap"><svg class="ci" width="32" height="32" style="color:var(--teal)"><use href="#i-target"/></svg></div>
+        <div class="research-name">Cancer Diagnosis &amp; Risk Stratification</div>
+        <p class="research-desc">Early detection models using clinical, radiological, and molecular data. Prognostic modeling and AI-based clinical decision-support systems for Egyptian cancer types.</p>
+        <div class="research-tags"><span class="tag">Early Detection</span><span class="tag">Prognosis</span><span class="tag">Decision Support</span></div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">05</div>
+        <div class="research-icon-wrap"><svg class="ci" width="32" height="32" style="color:var(--teal)"><use href="#i-gear"/></svg></div>
+        <div class="research-name">Personalized Treatment Optimization</div>
+        <p class="research-desc">Predictive modeling for treatment response and toxicity. AI-assisted planning in chemotherapy and radiotherapy using longitudinal real-world data from Egyptian cohorts.</p>
+        <div class="research-tags"><span class="tag">Predictive Modeling</span><span class="tag">Radiotherapy</span><span class="tag">Real-World Data</span></div>
+      </div>
+      <div class="research-card">
+        <div class="research-num">06</div>
+        <div class="research-icon-wrap"><svg class="ci" width="32" height="32" style="color:var(--teal)"><use href="#i-globe"/></svg></div>
+        <div class="research-name">Equitable &amp; Localized AI</div>
+        <p class="research-desc">Adapting global oncology AI to Egyptian and regional populations. Scalable, cost-effective tools for low-resource healthcare environments and rural communities.</p>
+        <div class="research-tags"><span class="tag">Health Equity</span><span class="tag">Localization</span><span class="tag">Low-Resource</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact" id="impact">
+  <div class="container">
+    <div class="section-label">Regional Reach</div>
+    <h2 class="section-title">Impact Across <em>Egypt &amp; Beyond</em></h2>
+    <div class="divider"></div>
+    <div class="impact-inner">
+      <div class="impact-visual">
+        <div class="impact-map-bg">
+          <div class="grid-overlay"></div>
+          <div class="impact-dot dot-alex"></div>
+          <div class="impact-dot dot-cairo"></div>
+          <div class="impact-dot dot-aswan"></div>
+          <div class="impact-dot dot-nairobi"></div>
+          <div class="impact-dot dot-riyadh"></div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.15" viewBox="0 0 400 380">
+            <line x1="152" y1="106" x2="180" y2="133" stroke="#00c8b4" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="180" y1="133" x2="220" y2="266" stroke="#00c8b4" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="220" y1="266" x2="240" y2="304" stroke="#c9a96e" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="180" y1="133" x2="288" y2="160" stroke="#00c8b4" stroke-width="1" stroke-dasharray="4,4"/>
+          </svg>
+          <div style="position:absolute;top:28%;left:38%;transform:translate(-130%,-50%);font-family:'DM Mono',monospace;font-size:.55rem;color:rgba(0,200,180,.7);white-space:nowrap">Alexandria HQ</div>
+          <div style="position:absolute;top:70%;left:55%;transform:translate(15px,5px);font-family:'DM Mono',monospace;font-size:.55rem;color:rgba(201,169,110,.7)">Upper Egypt</div>
+        </div>
+      </div>
+      <div class="impact-metrics">
+        <div class="impact-metric">
+          <div class="impact-num">27</div>
+          <div class="impact-info">
+            <div class="impact-label">Egyptian Governorates Targeted</div>
+            <div class="impact-detail">AI tools designed for deployment across all Egyptian governorates, with special emphasis on underserved Upper Egypt, Delta, and frontier communities lacking oncology infrastructure.</div>
+          </div>
+        </div>
+        <div class="impact-metric">
+          <div class="impact-num gold">54+</div>
+          <div class="impact-info">
+            <div class="impact-label">African &amp; MENA Nations in Scope</div>
+            <div class="impact-detail">Positioned as the regional hub for AI-driven oncology innovation, enabling technology transfer and collaborative research across Africa and the Middle East.</div>
+          </div>
+        </div>
+        <div class="impact-metric">
+          <div class="impact-num">1st</div>
+          <div class="impact-info">
+            <div class="impact-label">Egyptian Oncology AI Platform</div>
+            <div class="impact-detail">Building Egypt's first purpose-built AI drug discovery and treatment optimization platform, calibrated to Egyptian patient genomics, hospital workflows, and health system realities.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="leadership" id="leadership">
+  <div class="container">
+    <div class="section-label">People</div>
+    <h2 class="section-title">Lab <em>Team</em></h2>
+    <div class="divider"></div>
+
+    <!-- PI featured row -->
+    <div class="pi-row">
+      <div class="leader-card-inner">
+        <div class="leader-avatar">
+          <svg class="ci" width="34" height="34" style="color:var(--teal)"><use href="#i-user"/></svg>
+        </div>
+        <div>
+          <div class="leader-name">Prof. Dr. Waleed Arafat</div>
+          <div class="leader-role">Principal Investigator &amp; Lab Director<br>Clinical Oncology</div>
+          <div class="leader-affil">Department of Clinical Oncology<br>Faculty of Medicine &middot; Alexandria University</div>
+          <div class="leader-badge">
+            <svg class="ci" width="11" height="11" style="color:var(--gold)"><use href="#i-target"/></svg>
+            Principal Investigator
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="leadership-text">Under the leadership of Prof. Dr. Waleed Arafat, the ACO-AI Lab is driven by a vision to make cutting-edge AI oncology research accessible, applicable, and impactful within Egypt and the wider region. The lab integrates deep clinical expertise with advanced computational science, ensuring that every AI model and platform developed has direct translational relevance to real-world oncology practice in resource-limited settings.</p>
+        <p class="leadership-text">Prof. Arafat brings extensive experience in clinical oncology, translational research, and healthcare system integration—uniquely positioning the lab to bridge the gap between global AI innovation and local healthcare delivery in Egypt.</p>
+        <div class="expertise-grid">
+          <div class="expertise-item"><div class="expertise-dot"></div><div class="expertise-text">Clinical Oncology &amp; Cancer Care</div></div>
+          <div class="expertise-item"><div class="expertise-dot"></div><div class="expertise-text">Translational AI Research</div></div>
+          <div class="expertise-item"><div class="expertise-dot" style="background:var(--gold)"></div><div class="expertise-text">Drug Discovery &amp; Therapeutics</div></div>
+          <div class="expertise-item"><div class="expertise-dot" style="background:var(--gold)"></div><div class="expertise-text">Health Systems &amp; Policy</div></div>
+          <div class="expertise-item"><div class="expertise-dot"></div><div class="expertise-text">Medical Imaging &amp; Radiomics</div></div>
+          <div class="expertise-item"><div class="expertise-dot"></div><div class="expertise-text">Regional Capacity Building</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Researchers grid -->
+    <div class="researchers-label">Researchers</div>
+    <div class="researchers-grid">
+
+      <!-- Dr. Ahmed Shaheen -->
+      <div class="researcher-card">
+        <div class="researcher-avatar" style="border-color:rgba(201,169,110,.35)">
+          <svg class="ci" width="24" height="24" style="color:var(--gold)"><use href="#i-flask"/></svg>
+        </div>
+        <div class="researcher-info">
+          <div class="researcher-name">Dr. Ahmed Shaheen</div>
+          <div class="researcher-title">Researcher &middot; AI Drug Discovery &amp; Translational Oncology</div>
+          <div class="researcher-focus">Dr. Shaheen leads computational efforts within the lab's flagship AI Drug Discovery Platform grant. His research develops and validates AI-driven drug discovery pipelines tailored for the Egyptian oncology landscape, integrating multi-omics datasets with machine learning frameworks to identify novel therapeutic targets and repurpose existing compounds for cost-effective, population-specific treatment strategies. A core focus of his work is the equitable deployment of these tools across underserved communities throughout Egypt.</div>
+          <div class="researcher-tags">
+            <span class="rtag">Drug Discovery</span>
+            <span class="rtag">Multi-Omics</span>
+            <span class="rtag">ML Models</span>
+            <span class="rtag">Translational Oncology</span>
+            <span class="rtag">Health Equity</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open position card -->
+      <div class="researcher-card" style="opacity:.4;pointer-events:none;border-style:dashed">
+        <div class="researcher-avatar" style="border-style:dashed">
+          <svg class="ci" width="24" height="24" style="color:var(--muted)"><use href="#i-users"/></svg>
+        </div>
+        <div class="researcher-info">
+          <div class="researcher-name" style="color:var(--muted)">Join Our Team</div>
+          <div class="researcher-title" style="color:var(--muted)">Open Positions &middot; Researchers &amp; Fellows</div>
+          <div class="researcher-focus" style="color:var(--muted)">We are actively seeking researchers in computational oncology, medical imaging AI, and clinical data science. Positions available for postdoctoral fellows, PhD candidates, and clinical research associates.</div>
+          <div class="researcher-tags">
+            <span class="rtag" style="color:var(--muted);border-color:rgba(136,153,170,.2)">Open Role</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING -->
+<section class="training" id="training">
+  <div class="container">
+    <div class="section-label">Education</div>
+    <h2 class="section-title">Training &amp; <em>Capacity Building</em></h2>
+    <div class="divider"></div>
+    <p style="font-size:.95rem;color:var(--muted);line-height:1.8;max-width:620px">Building the next generation of AI-literate oncologists and computational researchers across Egypt and the MENA region.</p>
+    <div class="training-grid">
+      <div class="training-card">
+        <div class="training-icon-wrap"><svg class="ci" width="36" height="36" style="color:var(--teal)"><use href="#i-cap"/></svg></div>
+        <div class="training-title">Clinician AI Training</div>
+        <p class="training-desc">Structured programs teaching oncologists and healthcare professionals to interpret, apply, and critically evaluate AI-driven clinical tools.</p>
+      </div>
+      <div class="training-card">
+        <div class="training-icon-wrap"><svg class="ci" width="36" height="36" style="color:var(--teal)"><use href="#i-cpu"/></svg></div>
+        <div class="training-title">Computational Oncology</div>
+        <p class="training-desc">Advanced training for researchers and data scientists in machine learning, deep learning, and bioinformatics applied to oncology data.</p>
+      </div>
+      <div class="training-card">
+        <div class="training-icon-wrap"><svg class="ci" width="36" height="36" style="color:var(--teal)"><use href="#i-image"/></svg></div>
+        <div class="training-title">Radiomics &amp; Imaging AI</div>
+        <p class="training-desc">Hands-on workshops covering radiomics pipelines, image segmentation, and integration of imaging biomarkers into clinical workflows.</p>
+      </div>
+      <div class="training-card">
+        <div class="training-icon-wrap"><svg class="ci" width="36" height="36" style="color:var(--teal)"><use href="#i-users"/></svg></div>
+        <div class="training-title">Early Career Mentorship</div>
+        <p class="training-desc">Development programs for early-career investigators, including research methodology, grant writing, and translational science skills.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLAB -->
+<section class="collab">
+  <div class="container">
+    <div class="collab-label">Collaborations &amp; Partnerships</div>
+    <div class="collab-row">
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-building"/></svg>Alexandria University</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-building"/></svg>Egyptian Ministry of Health</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-hospital"/></svg>National Cancer Institute Cairo</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-globe"/></svg>African Oncology Network</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-globe"/></svg>MENA AI Health Consortium</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-brain"/></svg>International AI &amp; Biotech Partners</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-globe"/></svg>WHO Regional Office EMRO</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-building"/></svg>European Research Networks</div>
+      <div class="collab-item"><svg class="ci" width="12" height="12" style="color:var(--teal)"><use href="#i-shield"/></svg>Public Health Organizations</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="section-label" style="justify-content:center">Get In Touch</div>
+      <h2 class="section-title">Partner with <em>ACO-AI Lab</em></h2>
+      <div class="divider" style="margin:1.5rem auto"></div>
+      <p class="contact-text">We welcome collaborations with academic institutions, clinical centers, AI companies, and funding bodies committed to advancing equitable, evidence-based cancer care through artificial intelligence. Whether you are interested in joint research, capacity building, or technology partnerships—we would love to connect.</p>
+      <div class="contact-actions">
+        <a href="mailto:aco-ai@alexmed.edu.eg" class="btn-primary">
+          <svg class="ci" width="14" height="14" style="color:var(--deep)"><use href="#i-mail"/></svg>
+          Send an Inquiry
+        </a>
+        <a href="#grant" class="btn-ghost">
+          <svg class="ci" width="14" height="14"><use href="#i-arrow"/></svg>
+          View Grant Details
+        </a>
+      </div>
+    </div>
+    <div class="contact-cards">
+      <div class="contact-card">
+        <div class="contact-card-label"><svg class="ci" width="13" height="13" style="color:var(--teal)"><use href="#i-pin"/></svg>Location</div>
+        <div class="contact-card-val">Department of Clinical Oncology<br>Faculty of Medicine<br>Alexandria University<br>Alexandria, Egypt</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-label"><svg class="ci" width="13" height="13" style="color:var(--teal)"><use href="#i-user"/></svg>Leadership</div>
+        <div class="contact-card-val">Prof. Dr. Waleed Arafat<br>Principal Investigator<br>ACO-AI Lab Director</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-label"><svg class="ci" width="13" height="13" style="color:var(--teal)"><use href="#i-target"/></svg>Focus Areas</div>
+        <div class="contact-card-val">AI Drug Discovery &middot; Medical Imaging<br>Clinical Decision Support &middot; LLMs<br>Treatment Localization &middot; Equity AI</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    ACO-AI Lab &middot; Alexandria Clinical Oncology AI &amp; Translational Research Lab<br>
+    Department of Clinical Oncology &middot; Faculty of Medicine &middot; Alexandria University
+  </div>
+  <div class="footer-right">Transforming Cancer Care Through AI &middot; Egypt &middot; Africa &middot; MENA</div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.research-card,.grant-card,.training-card,.expertise-item,.impact-metric,.researcher-card,.pillar').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(18px)';
+  el.style.transition = `opacity 0.55s ease ${i*0.055}s, transform 0.55s ease ${i*0.055}s`;
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
